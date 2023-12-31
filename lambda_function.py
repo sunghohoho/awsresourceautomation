@@ -3,6 +3,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 
 def handler(event, context):
     print("Starting google.com")
@@ -26,8 +29,27 @@ def handler(event, context):
 
     s = Service(ChromeDriverManager().install())
     browser = webdriver.Chrome(service=s, options=chrome_options)
-    browser.get('https://signin.aws.amazon.com/federation?Action=login&SigninToken=p1v0QaP6ggRv1ydCQMnqSkh2bOEWtf-f9CwdpuPUxuf4JtmgVehAgXiQHUVYJAM53pnJj9JlgVVaBPMndQVZpbIB3v66qftuhWw5VVuWTO10kfL_Ykuc9YQ9syIXkhVBnswkyr-2hgeyAUECkUB1a3hMMaXehwAWWD0uCBsVa71ohiFgqwx-2sPMMZhtyClcAi5bqOZjA3dw0lWNqi-MMKOB4nE12n2qqL6T53OgnKE3NuH2_yn9rUeXWQ4OeWbfho3inY_NL25sPCRAPZG3Y2vHtlPHoU81yyoMpETZLWMxTSsOd5QD1VgUScI7Z8xlams8wHW3C6EH7cWm6Xh2s9pKVXgqIFicNH7QxFwB9x35e0oaaYn_PCEaOvgPRJhfgnfV8alE3_-C08x49KPUx5MO1MbDEexYJ4VCWsxhZQSK2OKlCUkqft7NORi1A0Xnye6NDzdsurC07sMEQv15fmqCcP0EHJJuEjQG0LfCbsVtG8CWA76M1zr0jOAD0HNPVcWkWEXcjarSQCeubWGgcs_KVKApd_TZNTWGQA1FWH_cEiAh_2lEYSKWpzegqPeVZu-KFBrpYyf3OzmWdk4BduPcm05DEY85fLzYd7hs5EuziIaXEy-Ssz0ER8Heumcgdg_RTPzBosAlWAUN1zrN3ymfFfKgmKN7O_nalGqYxn13OpDh2DRezPLMZyLsydIOx88MIPGkEh_6vqFMjgeYH8q3niuOr0gzXw1QIqCT-Gg04FnGE1qPQoSByk8Fzo_gH6Xhe8E0re286wlSoo7R_hLpmHMv-z8FDbGTc0F8yLhvlsvP6iL5Qq_Jk1-oMRWMrqqaBo2l5urEQpvFaago41HmDRg-TbaWUqPY0NfbqbVfaQ-CdQ7ClWFXmd9JKarK5HCIn_dz-5wAz-m_wcE2ql14G-GKSwN_R7eJOSf4XLlOMsqzgHhjrmWwAlh1ggjjYFigeCiLcBhUDyCWR1AJ6cqcB88hODnrwe0nEnDPn8oO2N85hW4ATQxr7zua99ok4Zy_fWu72A4IDBLOSSRj4Eltt1QIhBVmu4KcQOlK7-_afLC-RpsLeFaX92DzL3Pn_2nG1IPOxldrBjse5zH6dcdgAesvfK3d8YazciWX4tGUr0uuRG3S1u6D1RI152w6cMpswgJRGBy7pyNHokt4cW8UFr9W_aixX3E3fNux93nWHNFMbrh4LZ7t09G9uYaFObEsAQvexcMzvMKDDKjk1nXl5Xlw1GtqwDWLYBIr7_RxRJw2nvKntrOp6v2B19E9IappnQc2GrJ4NIfM9rKl8OUq4nnAulUtfFi--_3NBt8UZjfPHpK1DPFzGTsGm513jEECl5sPPouWYs6bhNpqoDxm3_fePe8r1Y9oNhpEE7rqN39MHT1EfNDCN8xp4_xUBcsubDO8YUQuBl1LzcRIgpw0SyEbhfbpMQvneYs&Destination=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome')
+    browser.get('https://signin.aws.amazon.com/federation?Action=login&SigninToken=ANX43_vk6ToEUEPZrMHO5UFPSeqKyplFmw3rYQ0221H45WvG-x2UOtEjp4zS8w5gWrdEnoEN7h3xPEpmreQT6-Sd74TKgAgYnUrNlUF_ADS2qbWLCsoI1jEf3vYIhb9PaSWA5iw5TNhrtlNCUNypxOsx3tZEQsYAhP8t8hDTj5FhaYKUpQT72QDQmBwXYKeATAt1-z9lPbOcRXazr4Wg412cyWl6EmofLLiqVpEHcGtP-eEIhVcK8r1SZ7Gc6u059HyBAidky9ZtVHJwN7Eu4wvnuWADVXYtr1XhACmVTPWGyb7PSsPBcYOpTu8c3x7zX67E6DoRYiwIQHMKZzXBVVW6Ga2X6dK-3-I8eAL2VRLQWUxuckI0ymXDl6PFuzsZNDj5PIvxL4TspmvrrvNNRa2dOafUV2ropG9_S6C7BhrJl4qtNtAW0aUbGl-qwYLFnM5BeHOZOEopZba_6iy4UZ44UjrRIGbEHtgIhteTqlqfyNeW2jkFv9QNmJ6S2zBmqlSZPuA42P7fGDw-vjSI1o4PK_AlZSFfTJHrzNKXt4CLb2bkg2-YO1k2oSFBMf4N4Wpu8NymcY5FZnCl_9l-CLMFepB6EZJik5PU4ntO5IaBkdPQUSCJsISHLPulNDvdIFieH0DCbsz-UBaDV7Dar203D-F6QKBKRSTQBZyf96UK2WTgAtoIusXG8jVKdzks4B5JKjtRnk8vE8WdnNFX-T3Qh_rPwz7MZIo5dEWAP0gXdo7t3aN4IoBauwoYZqdK9PvonakAmq5477N_XjZSnzsbggLCdVypq8yldEbZTMpgplvVzS9iidWfU_ytPKSH-b1RMAUMRqz1_0IfeKaZu6Iw0xNYGVIi7F4GOLqch3dU3Aci2NjEAQ160H4tgef8p-sJN5VjLPr1-nWTIBaSV4WhfYyla3pJ2Cj_YaBoXIi2YZChnZrFJlup_oKRQteSTfLDgR-c6-7DY65tF662QBK4w9qx4fdOGcFzOgOyEayqxgA0vNbzDtRw2sT5am52ti0nnPy6Ycg2yuVWL1t8QIsTSpp4AlRBRpPf2oDVD-sIXxd7RfI_UE8B8FbYE5ITmyZZFbaz8mtHPQ_Qa2KfWx6CEXBbTsGBRLHklZD--bvmQEuaoDWgdxk1xNmr6BHB5fSdgxicS52Gs1ilXAFBA_5MlDuZ2ngJPzu0Z1t2FxqxrSxxqMVVj4iZPO5hdo795usOOcucAO65fa9vL92ECXnGzdF339Xdxkfow7eNDlnncx30DauIsRibE_PDORtMnhiHgB_JXdsUdGQYgWUNhtw2kbY_lC1zBOD0AnpGBahWx-kI4CUWGe5NxxSWnM6fmQzEyD85ZPnfqaZZ3O6ZZrozlFGzeqPZ0Q8DHdpRi9BWqRT8P_nBplWA2u4TyFt4g3cK2Lyx7nC_9t7BUCAW1X54FJYlqe0vGJzS1jM&Destination=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome')
+    browser.get('https://health.aws.amazon.com/health/home#/account/event-log')
     title = browser.title
+    print(title)
+
+    WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'table')))
+
+    change_table = browser.find_element(By.TAG_NAME,"table")
+    print(change_table.text)
+    change_trs = change_table.find_element(By.TAG_NAME,"tbody").find_elements(By.TAG_NAME,"tr")
+    print(change_trs)
+
+
+    for change_tr in change_trs:
+
+        change_tds = change_tr.find_elements(By.TAG_NAME,"td")
+        print(change_tds)
+        for td_idx, change_td in enumerate(change_tds):
+            print(td_idx,change_td.text)
+
+        print(f"\n")
 
     return title
 
