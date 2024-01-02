@@ -5,6 +5,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import datetime
+import time
 
 
 def handler(event, context):
@@ -24,34 +26,34 @@ def handler(event, context):
     chrome_options.add_argument('--ignore-certificate-errors')
     chrome_options.add_argument('--homedir=/tmp')
     chrome_options.add_argument('--disk-cache-dir=/tmp/cache-dir')
-    chrome_options.add_argument(
-        'user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
+    chrome_options.add_argument('user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
 
     s = Service(ChromeDriverManager().install())
     browser = webdriver.Chrome(service=s, options=chrome_options)
-    browser.get('https://signin.aws.amazon.com/federation?Action=login&SigninToken=ANX43_vk6ToEUEPZrMHO5UFPSeqKyplFmw3rYQ0221H45WvG-x2UOtEjp4zS8w5gWrdEnoEN7h3xPEpmreQT6-Sd74TKgAgYnUrNlUF_ADS2qbWLCsoI1jEf3vYIhb9PaSWA5iw5TNhrtlNCUNypxOsx3tZEQsYAhP8t8hDTj5FhaYKUpQT72QDQmBwXYKeATAt1-z9lPbOcRXazr4Wg412cyWl6EmofLLiqVpEHcGtP-eEIhVcK8r1SZ7Gc6u059HyBAidky9ZtVHJwN7Eu4wvnuWADVXYtr1XhACmVTPWGyb7PSsPBcYOpTu8c3x7zX67E6DoRYiwIQHMKZzXBVVW6Ga2X6dK-3-I8eAL2VRLQWUxuckI0ymXDl6PFuzsZNDj5PIvxL4TspmvrrvNNRa2dOafUV2ropG9_S6C7BhrJl4qtNtAW0aUbGl-qwYLFnM5BeHOZOEopZba_6iy4UZ44UjrRIGbEHtgIhteTqlqfyNeW2jkFv9QNmJ6S2zBmqlSZPuA42P7fGDw-vjSI1o4PK_AlZSFfTJHrzNKXt4CLb2bkg2-YO1k2oSFBMf4N4Wpu8NymcY5FZnCl_9l-CLMFepB6EZJik5PU4ntO5IaBkdPQUSCJsISHLPulNDvdIFieH0DCbsz-UBaDV7Dar203D-F6QKBKRSTQBZyf96UK2WTgAtoIusXG8jVKdzks4B5JKjtRnk8vE8WdnNFX-T3Qh_rPwz7MZIo5dEWAP0gXdo7t3aN4IoBauwoYZqdK9PvonakAmq5477N_XjZSnzsbggLCdVypq8yldEbZTMpgplvVzS9iidWfU_ytPKSH-b1RMAUMRqz1_0IfeKaZu6Iw0xNYGVIi7F4GOLqch3dU3Aci2NjEAQ160H4tgef8p-sJN5VjLPr1-nWTIBaSV4WhfYyla3pJ2Cj_YaBoXIi2YZChnZrFJlup_oKRQteSTfLDgR-c6-7DY65tF662QBK4w9qx4fdOGcFzOgOyEayqxgA0vNbzDtRw2sT5am52ti0nnPy6Ycg2yuVWL1t8QIsTSpp4AlRBRpPf2oDVD-sIXxd7RfI_UE8B8FbYE5ITmyZZFbaz8mtHPQ_Qa2KfWx6CEXBbTsGBRLHklZD--bvmQEuaoDWgdxk1xNmr6BHB5fSdgxicS52Gs1ilXAFBA_5MlDuZ2ngJPzu0Z1t2FxqxrSxxqMVVj4iZPO5hdo795usOOcucAO65fa9vL92ECXnGzdF339Xdxkfow7eNDlnncx30DauIsRibE_PDORtMnhiHgB_JXdsUdGQYgWUNhtw2kbY_lC1zBOD0AnpGBahWx-kI4CUWGe5NxxSWnM6fmQzEyD85ZPnfqaZZ3O6ZZrozlFGzeqPZ0Q8DHdpRi9BWqRT8P_nBplWA2u4TyFt4g3cK2Lyx7nC_9t7BUCAW1X54FJYlqe0vGJzS1jM&Destination=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome')
+    browser.get('https://signin.aws.amazon.com/federation?Action=login&SigninToken=FhpkkrS18XfhCPJSZb-5vA_1FlN8OCCaalRXfj2d_jwO16NxVgr7dRuiNmCL8okwGrCj06zk9LMW8KtpvYMP1rmLIHNO3FdaihvTlDv_KQoRMuep3s0a4Ze_zK-MAb_xH96yQXFsOXAiaMmRAzq_hwqj35HOgHkrO75gZmNZ0YkUp-1xdLiliU2NJrOz5WzP7Zm6JTX7juToAnMJCmYsJ0uZ212n9r4Deqlj74_Ilo_TjBPgRnWlnbGcOYqPlVxV0KYPGxyg-cIpiN0Yr_ZFStmg4szYVOVoS_IiZGtZWXNn7OKAshDyqopwUnjButrLd51JsRr91RzwKwEkC-_YugMWqkfXjfLXLSlFKimZlNaaix4386TSrP1zyZIStDTuOiPLqWkCHFIGHzOxq924JK1fmB_5V60n5MWjTcbRzIaoC_u7htJIxw-uzq4Mjg41KYw07Ec1Vs_Fef8DATSKYuyfJPx2HaZwcgMUKFfP7liUruxs9ltfkFF9cXozP3oPtcOKa7nkGDe_9iQVVQy556OrKFDRegD_W7hA0cjBLUyxslT1GOIZzpUPqDtMhE7gQJ4Prq-F4bW1HtTbSFrRItOfDn7jHHrezL8_Ng4mW3d5nunHO4S57F53BEOlKgZhiKTbc8cDe_WW03IGm7jKWEOSlfQ11fItUiqCD1pCPAvxc3U17jV04Y7fklS8Q6NWwRh1k_aLGZxX3zxq3THgugck1NiUgsjbW0RqVQ7_Ywc274Ljge3GqfnlJYMLPcCeU5xxPgnElqEYGTfaNgcZ_-IrNkAsxykTGwGHRd7CauhzHHrvZw-LzHM0GTR_IeS82QY74N1AvPhBZeZlvamTgrTQKpB4QJ6L8BaEBmWr9b4ZJROxDM7eUfu1zsL5u2eiYr1M-sP_LtaoDfYcYXqDjsqafpj3CK_kLlIt34jYP7zlaaqmKVzzMShTSDH2Jat6YSzzunCyb3q1G2TLWG3622vzHRhv_l-JgFI_NCe06RhuMjBD2eYPi62AeHesFANI5vWo4YY6wjf7gEDbtB-op4HOofvROma21j36sRySJmFzaw3-GjPN6c8sksPPlwJ5ezdgOjfMbbryrLuziVzfEvBY4Hauhti398tIxWnGuDOBNxXEURn7p9OuJd06MY7pY9BhGeKQ-H1tE1rj1Gm3GLKgYRRf3GqHP9--Wgrabuh6_cj9U85482U8j2nKtgiHD8e15J6bcxTs_yiHaEJmukiqgu_GodRxa6xWg-gGggD-rhNbyIQC_KK49DxAXXfSU5OZ0gNzMdRnhGvkCRWISxMEw4AdLxk5FoZRKkNizadD32yRiU2HZGk-i5TuMD-h4LUujnMtTMQ2GVM6o8cK-PPlW2g_vrriHSrmBBJ7qmF1SQlzh1xgUpWQ0na8PE12BMRL-Eu7XpbhOkRcU4q0rdizGntsuEA9Kc8jbWfqPJdWZyEUWSZVWqY&Destination=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome')
+
+    time.sleep(1)
+
     browser.get('https://health.aws.amazon.com/health/home#/account/event-log')
+
+    time.sleep(1)
+
     title = browser.title
     print(title)
 
-    WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'table')))
+    WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.TAG_NAME, 'table')))
 
     change_table = browser.find_element(By.TAG_NAME,"table")
-    print(change_table.text)
     change_trs = change_table.find_element(By.TAG_NAME,"tbody").find_elements(By.TAG_NAME,"tr")
     print(change_trs)
-
-
     for change_tr in change_trs:
-
         change_tds = change_tr.find_elements(By.TAG_NAME,"td")
-        print(change_tds)
-        for td_idx, change_td in enumerate(change_tds):
-            print(td_idx,change_td.text)
+        eventlink = change_tds[1].find_element(By.TAG_NAME,"a")
+        browser.execute_script("arguments[0].click()",eventlink)
+
+        WebDriverWait(browser, 30).until(EC.presence_of_element_located((By., 'table')))
 
         print(f"\n")
 
-    return title
 
-
-print(handler('test','test'))
+handler('test','test')
